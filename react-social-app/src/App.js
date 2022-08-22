@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route
           path="/react-social-network"
-          element={user ? <Home /> : <Register />}
+          element={user ? <Home /> : <Login />}
         />
         <Route
           path="/react-social-network/login"

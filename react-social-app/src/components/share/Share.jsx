@@ -1,28 +1,44 @@
 import "./share.css";
-import { PermMedia, Label, Room, EmojiEmotions } from "@mui/icons-material";
-import { useContext, useRef } from "react";
+import {
+  PermMedia,
+  Label,
+  Room,
+  EmojiEmotions,
+  Cancel,
+} from "@mui/icons-material";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useState } from "react";
 import axios from "axios";
 
 function Share() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useContext(AuthContext);
-  const { file, setFile } = useState(null);
+  const [file, setFile] = useState(null);
   const [desc, setDesc] = useState("");
-  async function handleSubmit(e) {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newPost = {
       userId: user._id,
       desc: desc,
     };
+    if (file) {
+      const data = new FormData();
+      const fileName = Date.now() + file.name;
+      data.append("name", fileName);
+      data.append("file", file);
+      newPost.img = fileName;
+      console.log(newPost);
+      try {
+        await axios.post("/upload", data);
+      } catch (err) {}
+    }
     try {
       await axios.post("/posts", newPost);
-      setDesc("");
-    } catch (error) {
-      console.log(error);
-    }
-  }
+      window.location.reload();
+    } catch (err) {}
+  };
+
   return (
     <div className="share">
       <div className="share-wrapper">
@@ -39,12 +55,20 @@ function Share() {
           <input
             placeholder={`What's in your mind ${user.username}?`}
             className="share-input"
-            // ref={desc}
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
           />
         </div>
         <hr className="share-hr" />
+        {file && (
+          <div className="share-img-conatainer">
+            <img src={URL.createObjectURL(file)} alt="" className="share-img" />
+            <Cancel
+              onClick={() => setFile(null)}
+              className="share-cancel-img"
+            />
+          </div>
+        )}
         <form className="share-bottom" onSubmit={handleSubmit}>
           <div className="share-options">
             <label htmlFor="file" className="share-option">

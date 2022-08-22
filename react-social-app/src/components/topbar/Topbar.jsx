@@ -24,10 +24,6 @@ function Topbar() {
         </div>
       </div>
       <div className="topbar-right">
-        <div className="topbar-links">
-          <span className="topbar-link">Homepage</span>
-          <span className="topbar-link">TimeLine</span>
-        </div>
         <div className="topbar-icons">
           <div className="topbar-icon-item">
             <Person />
@@ -41,18 +37,18 @@ function Topbar() {
             <Notifications />
             <span className="topbar-icon-badge">1</span>
           </div>
+          <Link to={`/react-social-network/profile/${user.username}`}>
+            <img
+              src={
+                user.profilePicture
+                  ? PF + user.profilePicture
+                  : PF + "person/noAvatar.png"
+              }
+              alt=""
+              className="topbar-img"
+            />
+          </Link>
         </div>
-        <Link to={`/react-social-network/profile/${user.username}`}>
-          <img
-            src={
-              user.profilePicture
-                ? PF + user.profilePicture
-                : PF + "person/noAvatar.png"
-            }
-            alt=""
-            className="topbar-img"
-          />
-        </Link>
       </div>
     </div>
   );

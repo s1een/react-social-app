@@ -4,6 +4,7 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
+  transition: 0.8s;
 }
 
 /* span:hover {
@@ -11,4 +12,13 @@ body {
 } */
 button:hover {
   background-color: #ba8fff;
+}
+a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: 0.8s;
+}
+a:hover {
+  color: #ba8fff;
 }

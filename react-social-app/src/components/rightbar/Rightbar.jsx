@@ -1,10 +1,50 @@
 import "./rightbar.css";
 import { Users } from "../../dummyData";
 import Online from "../online/Online";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Friend from "../Friend/Friend";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { Button } from "@mui/material";
 function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [friends, setFriends] = useState([]);
+  const { user: currentUser, dispatch } = useContext(AuthContext);
+  const [followed, setFollowed] = useState(false);
 
+  useEffect(() => {
+    setFollowed(currentUser.followings.includes(user?._id));
+    const getFriends = async () => {
+      try {
+        const friendList = await axios.get("/users/friends/" + user?._id);
+        setFriends(friendList.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFriends();
+  }, [user]);
+
+  const handleClick = async () => {
+    try {
+      if (followed) {
+        await axios.put(`/users/${user._id}/unfollow`, {
+          userId: currentUser._id,
+        });
+        dispatch({ type: "UNFOLLOW", payload: user._id });
+      } else {
+        await axios.put(`/users/${user._id}/follow`, {
+          userId: currentUser._id,
+        });
+        dispatch({ type: "FOLLOW", payload: user._id });
+      }
+      setFollowed(!followed);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const HomeRightBar = () => {
     return (
       <>
@@ -27,6 +67,11 @@ function Rightbar({ user }) {
   const ProfileRightBar = () => {
     return (
       <>
+        {user.username !== currentUser.username && (
+          <Button variant="outlined" onClick={handleClick}>
+            {followed ? "Unfollow" : "Follow"}
+          </Button>
+        )}
         <h4 className="rightbar-title">User Information</h4>
         <div className="rightbar-info">
           <div className="rightbar-info-item">
@@ -50,54 +95,14 @@ function Rightbar({ user }) {
         </div>
         <h4 className="rightbar-title">User friends</h4>
         <div className="rightbar-followings">
-          <div className="rightbar-following">
-            <img
-              className="rightbar-following-img"
-              src={PF + "person/1.jpeg"}
-              alt=""
-            />
-            <span className="rightbar-following-name">John Carter</span>
-          </div>
-          <div className="rightbar-following">
-            <img
-              className="rightbar-following-img"
-              src={PF + "person/2.jpeg"}
-              alt=""
-            />
-            <span className="rightbar-following-name">John Carter</span>
-          </div>
-          <div className="rightbar-following">
-            <img
-              className="rightbar-following-img"
-              src={PF + "person/3.jpeg"}
-              alt=""
-            />
-            <span className="rightbar-following-name">John Carter</span>
-          </div>
-          <div className="rightbar-following">
-            <img
-              className="rightbar-following-img"
-              src={PF + "person/4.jpeg"}
-              alt=""
-            />
-            <span className="rightbar-following-name">John Carter</span>
-          </div>
-          <div className="rightbar-following">
-            <img
-              className="rightbar-following-img"
-              src={PF + "person/5.jpeg"}
-              alt=""
-            />
-            <span className="rightbar-following-name">John Carter</span>
-          </div>
-          <div className="rightbar-following">
-            <img
-              className="rightbar-following-img"
-              src={PF + "person/6.jpeg"}
-              alt=""
-            />
-            <span className="rightbar-following-name">John Carter</span>
-          </div>
+          {friends.map((el) => (
+            <Link
+              key={el._id}
+              to={`/react-social-network/profile/${el.username}`}
+            >
+              <Friend friend={el} />
+            </Link>
+          ))}
         </div>
       </>
     );

@@ -1,4 +1,5 @@
 export const AuthReducer = (state, action) => {
+  console.log(action.type);
   switch (action.type) {
     case "LOGIN_START":
       return {
@@ -7,6 +8,7 @@ export const AuthReducer = (state, action) => {
         error: false,
       };
     case "LOGIN_SUCCESS":
+      localStorage.setItem("user", JSON.stringify(action.payload));
       return {
         user: action.payload,
         isFetching: false,
@@ -18,6 +20,25 @@ export const AuthReducer = (state, action) => {
         user: null,
         isFetching: false,
         error: action.payload,
+      };
+    case "FOLLOW":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followings: [...state.user.followings, action.payload],
+        },
+      };
+
+    case "UNFOLLOW":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followings: state.user.followings.filter(
+            (fl) => fl !== action.payload
+          ),
+        },
       };
 
     default:

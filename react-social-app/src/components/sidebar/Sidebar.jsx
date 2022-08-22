@@ -12,16 +12,32 @@ import {
 } from "@mui/icons-material";
 
 import CloseFriend from "../closeFriend/CloseFriend";
-import { Users } from "../../dummyData";
-
-function Sidebar() {
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+function Sidebar({ user }) {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const usersList = await axios.get("/users/all/" + user?._id);
+        setUsers(usersList.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchUsers();
+  }, [user]);
   return (
     <div className="sidebar">
       <div className="sidebar-wrapper">
         <ul className="sidebar-list">
           <li className="sidebar-list-item">
             <RssFeed className="sidebar-icon" />
-            <span className="list-item-text">Feed</span>
+            <Link to="/react-social-network" className="list-item-text">
+              Feed
+            </Link>
           </li>
           <li className="sidebar-list-item">
             <Chat className="sidebar-icon" />
@@ -56,11 +72,15 @@ function Sidebar() {
             <span className="list-item-text">Courses</span>
           </li>
         </ul>
-        <button className="sidebar-btn">Show More</button>
         <hr className="sidebar-hr" />
         <ul className="sidebar-friendlist">
-          {Users.map((el) => (
-            <CloseFriend key={el.id} user={el} />
+          {users.map((el) => (
+            <Link
+              key={el._id}
+              to={`/react-social-network/profile/${el.username}`}
+            >
+              <CloseFriend user={el} />
+            </Link>
           ))}
         </ul>
       </div>

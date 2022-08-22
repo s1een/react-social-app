@@ -13,17 +13,27 @@ function Feed({ username }) {
       const response = username
         ? await axios.get("/posts/profile/" + username)
         : await axios.get(`posts/timeline/${user._id}`);
-      setPosts(response.data);
+      setPosts(
+        response.data.sort((post1, post2) => {
+          return new Date(post2.createdAt) - new Date(post1.createdAt);
+        })
+      );
     };
     fetchPosts();
   }, [username, user._id]);
   return (
     <div className="feed">
       <div className="feed-wrapper">
-        <Share />
-        {posts.map((el) => (
-          <Post key={el._id} post={el} />
-        ))}
+        {(!username || username === user.username) && <Share />}
+        {posts.length ? (
+          posts.map((el) => <Post key={el._id} post={el} />)
+        ) : (
+          <div className="post">
+            <div className="post-wrapper">
+              <h2 style={{ textAlign: "center" }}>NO POSTS YET!</h2>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

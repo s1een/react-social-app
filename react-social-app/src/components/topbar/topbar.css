@@ -24,7 +24,7 @@
   color: whitesmoke;
 }
 .topbar-center {
-  flex: 5;
+  flex: 3;
 }
 
 .searchbar {
@@ -51,11 +51,12 @@
 }
 
 .topbar-right {
-  flex: 4;
+  flex: 3;
   display: flex;
   align-items: center;
-  justify-content: space-around;
   color: white;
+  justify-content: flex-end;
+  padding: 0 20px;
 }
 
 .topbar-link {
@@ -66,6 +67,8 @@
 
 .topbar-icons {
   display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
 .topbar-icon-item {
