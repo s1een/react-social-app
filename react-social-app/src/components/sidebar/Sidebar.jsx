@@ -35,13 +35,15 @@ function Sidebar({ user }) {
         <ul className="sidebar-list">
           <li className="sidebar-list-item">
             <RssFeed className="sidebar-icon" />
-            <Link to="/react-social-network" className="list-item-text">
+            <Link to="/" className="list-item-text">
               Feed
             </Link>
           </li>
           <li className="sidebar-list-item">
             <Chat className="sidebar-icon" />
-            <span className="list-item-text">Chats</span>
+            <Link to="/messanger" className="list-item-text">
+              Chats
+            </Link>
           </li>
           <li className="sidebar-list-item">
             <YouTube className="sidebar-icon" />
@@ -75,10 +77,7 @@ function Sidebar({ user }) {
         <hr className="sidebar-hr" />
         <ul className="sidebar-friendlist">
           {users.map((el) => (
-            <Link
-              key={el._id}
-              to={`/react-social-network/profile/${el.username}`}
-            >
+            <Link key={el._id} to={`/profile/${el.username}`}>
               <CloseFriend user={el} />
             </Link>
           ))}

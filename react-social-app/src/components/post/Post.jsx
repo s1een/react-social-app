@@ -39,7 +39,7 @@ function Post({ post }) {
       <div className="post-wrapper">
         <div className="post-top">
           <div className="post-topleft">
-            <Link to={`profile/${user.username}`}>
+            <Link to={`/profile/${user.username}`}>
               <img
                 className="post-profile-img"
                 src={

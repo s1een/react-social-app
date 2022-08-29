@@ -52,11 +52,10 @@ router.get("/user/", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 // get all users
 router.get("/all/:userId", async (req, res) => {
   try {
-    const users = await User.find({ userId: req.params.userId });
+    const users = await User.find();
     let userList = [];
     users.filter((friend) => {
       const { _id, username, profilePicture } = friend;
@@ -69,7 +68,6 @@ router.get("/all/:userId", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
 // get friends
 router.get("/friends/:userId", async (req, res) => {
   try {
@@ -90,7 +88,6 @@ router.get("/friends/:userId", async (req, res) => {
   }
 });
 //follow user
-
 router.put("/:id/follow", async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
@@ -110,9 +107,7 @@ router.put("/:id/follow", async (req, res) => {
     res.status(403).json("you cant follow yourself");
   }
 });
-
 //unfollow a user
-
 router.put("/:id/unfollow", async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {

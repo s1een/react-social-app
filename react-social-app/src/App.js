@@ -5,30 +5,24 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
+import Messanger from "./pages/messanger/Messanger";
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={user ? <Home /> : <Login />} />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route
-          path="/react-social-network"
-          element={user ? <Home /> : <Login />}
+          path="/register"
+          element={user ? <Navigate to="/" /> : <Register />}
         />
         <Route
-          path="/react-social-network/login"
-          element={user ? <Navigate to="/react-social-network" /> : <Login />}
+          path="/messanger"
+          element={!user ? <Navigate to="/" /> : <Messanger />}
         />
-        <Route
-          path="/react-social-network/register"
-          element={
-            user ? <Navigate to="/react-social-network" /> : <Register />
-          }
-        />
-        <Route
-          path="/react-social-network/profile/:username"
-          element={<Profile />}
-        />
+        <Route path="/profile/:username" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

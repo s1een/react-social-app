@@ -3,7 +3,7 @@ import { Users } from "../../dummyData";
 import Online from "../online/Online";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Friend from "../Friend/Friend";
+import Friend from "../friend/Friend";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -96,10 +96,7 @@ function Rightbar({ user }) {
         <h4 className="rightbar-title">User friends</h4>
         <div className="rightbar-followings">
           {friends.map((el) => (
-            <Link
-              key={el._id}
-              to={`/react-social-network/profile/${el.username}`}
-            >
+            <Link key={el._id} to={`/profile/${el.username}`}>
               <Friend friend={el} />
             </Link>
           ))}

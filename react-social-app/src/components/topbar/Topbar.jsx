@@ -10,7 +10,7 @@ function Topbar() {
   return (
     <div className="topbar-container">
       <div className="topbar-left">
-        <Link to="/react-social-network" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
           <span className="logo"> {"</> Untrusted"}</span>
         </Link>
       </div>
@@ -37,7 +37,7 @@ function Topbar() {
             <Notifications />
             <span className="topbar-icon-badge">1</span>
           </div>
-          <Link to={`/react-social-network/profile/${user.username}`}>
+          <Link to={`/profile/${user.username}`}>
             <img
               src={
                 user.profilePicture
