@@ -6,6 +6,7 @@
 
 .message-top {
   display: flex;
+  align-items: center;
 }
 
 .message-img {

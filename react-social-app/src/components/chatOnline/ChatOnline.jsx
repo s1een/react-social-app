@@ -1,18 +1,53 @@
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
 import "./chatonline.css";
-function ChatOnline() {
+function ChatOnline({ onlineUsers, currentId, setCurrentChat }) {
+  const [friends, setFriends] = useState([]);
+  const [onlineFriends, setOnlineFriends] = useState([]);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  useEffect(() => {
+    async function getFriends() {
+      const res = await axios.get("/users/friends/" + currentId);
+      setFriends(res.data);
+    }
+    getFriends();
+  }, [currentId]);
+
+  useEffect(() => {
+    setOnlineFriends(friends.filter((f) => onlineUsers.includes(f._id)));
+  }, [onlineUsers, friends]);
+
+  async function handleClick(user) {
+    try {
+      const res = await axios.get(
+        `/conversations/find/${currentId}/${user._id}`
+      );
+      setCurrentChat(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div className="chat-online">
-      <div className="chat-online-friend">
-        <div className="chat-online-img-container">
-          <img
-            className="chat-online-img"
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-            alt=""
-          />
-          <div className="chat-online-badge"></div>
+      {onlineFriends.map((el) => (
+        <div className="chat-online-friend" onClick={() => handleClick(el)}>
+          <div className="chat-online-img-container">
+            <img
+              className="chat-online-img"
+              src={
+                el?.profilePicture
+                  ? PF + el.profilePicture
+                  : PF + "person/noAvatar.png"
+              }
+              alt=""
+            />
+            <div className="chat-online-badge"></div>
+          </div>
+          <span className="chat-online-name">{el?.username}</span>
         </div>
-        <span className="chat-online-name">John Doe</span>
-      </div>
+      ))}
     </div>
   );
 }

@@ -21,6 +21,7 @@
 .chat-box-wrapper {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .chat-box-top {
@@ -66,4 +67,13 @@
 .chat-online-wrapper {
   padding: 10px;
   height: 100%;
+}
+
+.no-conversation {
+  position: absolute;
+  top: 10%;
+  font-size: 50px;
+  color: #ba8fff;
+  text-align: center;
+  cursor: default;
 }
